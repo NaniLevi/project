@@ -40,9 +40,34 @@ class Api::V1::JobsController < ApplicationController
     }, except: [:created_at, :updated_at]
   end
 
+  # Mark job as deleted whithout destroy
+  # When the job is deleted/remove it should be kept in the database and marked as such.
+  # def destroy
+  #   if @job.deleted
+  #     render json: { deleted_job: [],
+  #                    deleted_already: not_modified,
+  #     }
+  #   else
+  #     @job.delete_event
+  #     render json: { deleted_job: @job,
+  #                    code: 200,
+  #                    status: :success,
+  #     }, except: [:created_at, :updated_at]
+  #   end
+  # end
+
   private
   def set_job
     @job = Job.find(params[:id])
   end
-end
 
+  def job_params
+    params.permit(:place, :name, :company_id )
+  end
+end
+#   params = ActionController::Parameters.new(user: { name: 'Francesco', age: 22, role: 'admin' })
+#   permitted = params.require(:user).permit(:name, :age)
+#   permitted.permitted?      # => true
+#   permitted.has_key?(:name) # => true
+#   permitted.has_key?(:age)  # => true
+#   permitted.has_key?(:role) # => false
